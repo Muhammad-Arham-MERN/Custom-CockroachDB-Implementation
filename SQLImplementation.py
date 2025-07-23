@@ -7,14 +7,11 @@ from datetime import datetime
 from agents import TResponseInputItem
 from sqlalchemy.dialects.postgresql import insert
 import json
-import asyncio
-from colorama import Back
 
 load_dotenv()
 
-cockroachdb_connection_url = os.getenv("COCKROACHDB_URL").replace(
-    "postgresql", "cockroachdb"
-)
+cockroachdb_connection_url = os.getenv("NEONDB_URL")
+
 
 
 class SessionTable(SQLModel, table=True):
@@ -73,7 +70,6 @@ class CockroachDBSession:
                 if limit is not None:
                     results.reverse()
                 
-                print(Back.YELLOW + str(results))
                 return [json.loads(result.message_data) for result in results]
 
         except Exception as e:
@@ -197,10 +193,10 @@ class CockroachDBSession:
 # async def run():
 #     create_db_tables()
 #     print("created tables")
-#     work = CockroachDBSession()
-#     results = await work.get_items()
+#     work = CockroachDBSession(session_id="hello")
+#     results = await work.add_items([{"man":"This is a man"},{"women":"This is a woman"}])
 #     print(results)
 
-
+# import asyncio
 # if __name__ == "__main__":
 #     asyncio.run(run())
